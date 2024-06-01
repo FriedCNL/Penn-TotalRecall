@@ -119,6 +119,19 @@ public class Constants {
 	 * Extension of temporary file used in editing an annotation file.
 	 */
 	public static final String deletionTempFileExtension = "del";
+
+	/**
+	 * Extension of incomplete suggestion files.
+	 */
+	public static final String temporarySuggestionFileExtension = "mmw";
+	
+	/**
+	 * Extension of temporary file used in editing a sugestion file.
+	 */
+	public static final String deletionSuggestionTempFileExtension = "tmmw";
+
+
+	
 	
 	public static final String wordpoolFileExtension = "txt";
 	

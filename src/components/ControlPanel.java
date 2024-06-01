@@ -27,6 +27,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import components.annotations.AnnotationDisplay;
+import components.suggestions.SuggestionDisplay;
 import components.audiofiles.AudioFileDisplay;
 import components.wordpool.WordpoolDisplay;
 
@@ -56,6 +57,10 @@ public class ControlPanel extends JPanel {
 		add(WordpoolDisplay.getInstance());
 		add(Box.createRigidArea(new Dimension(30, 0)));
 		add(AnnotationDisplay.getInstance());
+
+		add(Box.createRigidArea(new Dimension(30, 0)));
+		add(SuggestionDisplay.getInstance());
+
 		add(Box.createRigidArea(new Dimension(30, 0)));
 		add(DoneButton.getInstance());
 		add(Box.createRigidArea(new Dimension(30, 0)));

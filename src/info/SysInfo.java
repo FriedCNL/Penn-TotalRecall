@@ -108,9 +108,9 @@ public class SysInfo {
 				isJava5 = false;
 			}
 			else {
-				System.err.println("I don't understand what version of Java you are running");
+				System.err.println("I don't understand what version of Java you are running, defaulting intead to 1.6");
 				isJava5 = false;
-				isJava6 = false;
+				isJava6 = true;
 			}
 		}
 		

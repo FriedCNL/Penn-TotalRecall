@@ -71,7 +71,7 @@ public class MyColors {
 	 */
 	public static final Color annotationTextColor = Color.BLACK;
 
-	
+	public static final Color suggestionTextColor = new Color(36, 102, 0);
 	
 	
 	
@@ -98,6 +98,8 @@ public class MyColors {
 	 * Color of vertical reference lines and associated strings that indicate on he waveform annotations.
 	 */
 	public static final Color annotationLineColor = Color.RED; //PyParse color (255, 64, 255)
+
+	public static final Color suggestionLineColor = new Color(71, 204, 0);
 	
 	public static final Color replay200MillisFlashColor = new Color(120, 172, 221); //mac push button focused color, better than SystemColor.controlHighlight for other OSes
 	

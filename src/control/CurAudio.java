@@ -34,6 +34,9 @@ import components.MyMenu;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
+import components.suggestions.Suggestion;
+import components.suggestions.SuggestionDisplay;
+import components.suggestions.SuggestionFileParser;
 import components.audiofiles.AudioFile;
 import components.audiofiles.AudioFileDisplay;
 import components.waveform.WaveformBuffer;
@@ -205,6 +208,13 @@ public class CurAudio {
 				AnnotationDisplay.addAnnotations(tmpAnns);
 			}
 			
+			File mmwFile = new File(OSPath.basename(file.getAbsolutePath())
+					+ "." + Constants.temporarySuggestionFileExtension);
+			if(mmwFile.exists()) {
+				List<Suggestion> tmpSuggs = SuggestionFileParser.parse(mmwFile);
+				SuggestionDisplay.addSuggestions(tmpSuggs);
+			}
+
 			// start new video buffers
 			waveformBuffer = new WaveformBuffer();
 			waveformBuffer.start();

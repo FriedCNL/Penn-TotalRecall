@@ -35,6 +35,10 @@ import javax.swing.plaf.ComponentUI;
 import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
+
+import components.suggestions.Suggestion;
+import components.suggestions.SuggestionDisplay;
+
 import components.waveform.WaveformBuffer.WaveformChunk;
 
 import control.CurAudio;
@@ -197,6 +201,25 @@ public class WaveformDisplay extends JComponent {
 			g2d.setColor(MyColors.annotationTextColor);
 			g2d.drawString(text, xPos + 5, 40);
 		}
+
+		//draw suggestions
+		Suggestion[] suggs = SuggestionDisplay.getSuggestionsInOrder();
+		for(int i = 0; i < suggs.length; i++) {
+			double time = suggs[i].getTime();
+			int xPos = frameToComponentX(CurAudio.getMaster().millisToFrames(time));
+			if(xPos < 0) {
+				continue;
+			}
+			if(xPos > refreshWidth) {
+				break;
+			}
+			String text = suggs[i].getText();
+			g2d.setColor(MyColors.suggestionLineColor);
+			g2d.drawLine(xPos, 0, xPos, getHeight() - 1);
+			g2d.setColor(MyColors.suggestionTextColor);
+			g2d.drawString(text, xPos + 5, 40);
+		}
+
 		
 		//find progress bar position
 		progressBarXPos = frameToComponentX(refreshFrame);
