@@ -104,6 +104,8 @@ public class UserPrefs {
 	 * The parent of the file/directory from which the wordpool file will be selected.
 	 */
 	public static final String openWordpoolPath = "OPEN_WORDPOOL_PATH";
+
+	public static String wordpoolFilename = "WORDPOOL_FILENAME";
 	
 	/**
 	 * The parent of the file/directory from which the audio file/directory will be selected.

@@ -86,6 +86,16 @@ public class AnnotationDisplay extends JScrollPane {
 		}
 		table.getModel().addElement(ann);
 	}
+
+	public static void addNewWPAnn(Annotation ann, int wpLine) {
+		if(ann == null) {
+			throw new IllegalArgumentException("annotation/s cannot be null");
+		}
+		if(SysInfo.sys.forceListen) {
+			CurAudio.getListener().offerGreatestProgress(CurAudio.getMaster().millisToFrames(ann.getTime()));
+		}
+		table.getModel().addNewWPAnn(ann, wpLine);
+	}
 	
 	public static void addAnnotations(Iterable<Annotation> anns) {
 		if(anns == null) {

@@ -70,7 +70,7 @@ public class AnnotationFileParser {
 
 
 
-	private static String makeLine(Annotation ann) {
+	public static String makeLine(Annotation ann) {
 		return ann.getTime() + delimiter.toString() + ann.getWordNum() + delimiter.toString() + ann.getText();
 	}
 

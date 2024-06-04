@@ -56,6 +56,10 @@ public class WordpoolListModel implements ListModel {
 		return collection.size();
 	}
 
+	public int getTotalWordcount(){
+		return collection.size() + hiddenWords.size();
+	}
+
 	public void addElements(Iterable<WordpoolWord> words) {
 		WordpoolDisplay.clearText();		
 		for(WordpoolWord w: words) {
@@ -170,10 +174,51 @@ public class WordpoolListModel implements ListModel {
 		return null;
 	}
 
+	protected int getWordpoolWordIndex(String str, int idx_one, int idx_two) {
+		System.out.println("----------");
+		System.out.println("Bin search called with indices: " + Integer.valueOf(idx_one).toString() + " and  " + Integer.valueOf(idx_two).toString());
+		if (idx_one > idx_two){
+			return idx_two+2;
+		}
+		
+		//Edge cases, should be at the start or end
+		String start_str = collection.get(idx_one).getText();
+		System.out.println("Start str is: " + start_str);
+		if(str.compareTo(start_str) <= 0){
+			return idx_one + 1;
+		}
+		String end_str = collection.get(idx_two).getText();
+		System.out.println("End str is: " + end_str);
+		if(str.compareTo(end_str) == 0){
+			return idx_two + 1;
+		}
+		else if(str.compareTo(end_str) > 0){
+			return idx_two + 2;
+		}
+
+		int middle_idx = (idx_one + idx_two) / 2;
+		String middle_str = collection.get(middle_idx).getText();
+		System.out.println("Middle str is: " + middle_str);
+		System.out.println("");
+		int middle_compare = str.compareTo(middle_str);
+		if (middle_compare == 0){
+			return middle_idx + 1;
+		}
+		else if (middle_compare < 0){
+			return getWordpoolWordIndex(str, idx_one + 1, middle_idx - 1);
+		}
+
+		else{
+			return getWordpoolWordIndex(str, middle_idx + 1, idx_two - 1);
+		}
+
+		//return 1;
+	}
 
 
-
-
+	public void sortWords(){
+		collection.sort();
+	}
 
 
 	/**

@@ -48,6 +48,7 @@ public class WordpoolDisplay extends JPanel {
 
 	private static WordpoolScrollPane pane;
 
+
 	/**
 	 * Creates a new instance of the component, initializing internal components, listeners, and various aspects of appearance.
 	 */
@@ -116,6 +117,7 @@ public class WordpoolDisplay extends JPanel {
 		WordpoolList.getInstance().getModel().addElements(words);
 	}
 
+
 	/**
 	 * Finds the alphabetically first <code>WordpoolWord</code> that matches the provided <code>String</code>.
 	 * 
@@ -125,6 +127,30 @@ public class WordpoolDisplay extends JPanel {
 	public static WordpoolWord findMatchingWordpooWord(String str) {
 		return WordpoolList.getInstance().getModel().findMatchingWordpoolWord(str);
 	}
+
+
+	/**
+	 * Finds the alphabetically first <code>WordpoolWord</code> that matches the provided <code>String</code>.
+	 * 
+	 * @param str The <code>String</code> to be either added or matched, often the contents of the <code>WordpoolTextField</code>
+	 * @return The first index matching <code>WordpoolWord</code>, or a new index which will be the word's index if inserted into the wordpool
+	 */
+	public static int getWordpoolWordIndex(String str){
+		WordpoolWord result = WordpoolList.getInstance().getModel().findMatchingWordpoolWord(str);
+		if(result != null){
+			int resnumb = result.getNum();
+			System.out.println("Found existing entry with index: " + Integer.valueOf(resnumb).toString());
+			return resnumb;
+		}
+		WordpoolList.getInstance().getModel().restoreWordsStartingWith("");
+		WordpoolList.getInstance().getModel().sortWords();
+		int num_current_words = WordpoolList.getInstance().getModel().getTotalWordcount();
+		int new_row_idx = WordpoolList.getInstance().getModel().getWordpoolWordIndex(str, 0, num_current_words - 1);
+		WordpoolList.getInstance().getModel().hideWordsStartingWith(str);
+		return new_row_idx;
+
+	}
+
 
 	/**
 	 * Called by outside key listeners when the user types alphanumeric characters.

@@ -39,6 +39,10 @@ public class Annotation implements Comparable<Annotation>{
 	public int getWordNum() {
 		return wordNum;		
 	}
+
+	public void setWordNum(int numToSet){
+		this.wordNum = numToSet;
+	}
 	
 	public String getText() {
 		return text;

@@ -100,6 +100,7 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
 		if(path != null) {
 			File chosenFile = new File(path);
 			if(chosenFile.isFile()) {
+				UserPrefs.prefs.put(UserPrefs.wordpoolFilename, path);
 				UserPrefs.prefs.put(UserPrefs.openWordpoolPath, new File(path).getParentFile().getPath());	
 				switchWordpool(chosenFile);
 			}

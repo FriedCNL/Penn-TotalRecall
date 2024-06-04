@@ -16,14 +16,30 @@ package behaviors.multiact;
 
 import info.Constants;
 
-import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+
+import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import util.GiveMessage;
 import util.OSPath;
+
+import info.UserPrefs;
+
 import behaviors.UpdatingAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
 
@@ -81,7 +97,7 @@ public class AnnotateAction extends IdentifiedMultiAction {
 	 * @param e The <code>ActionEvent</code> provided by the trigger.
 	 */
 	@Override	
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e){
 		super.actionPerformed(e);
 		//do nothing if no audio file is open
 		if(CurAudio.audioOpen() == false) { 
@@ -105,11 +121,22 @@ public class AnnotateAction extends IdentifiedMultiAction {
 		
 		//find whether the text matches a wordpool entry, so we can find the wordpool number of the annotation text
 		WordpoolWord match = WordpoolDisplay.findMatchingWordpooWord(text);
+		int shouldbeindex = -1;
 		if(match == null) {
 			if(mode == Mode.REGULAR) { //words not from the wordpool must be marked as intrusions
 				return;
 			}
-			match = new WordpoolWord(text, -1);
+			String wordpoolFilename = UserPrefs.prefs.get(UserPrefs.wordpoolFilename, UserPrefs.wordpoolFilename);
+			//System.out.println("Current wordpool file is: " + wordpoolFilename);
+			shouldbeindex = WordpoolDisplay.getInstance().getWordpoolWordIndex(text);
+			String shouldbeindexstr = Integer.valueOf(shouldbeindex).toString();
+			System.out.println(text + " index should be " + shouldbeindexstr);
+			//match = new WordpoolWord(text, -1);
+			match = new WordpoolWord(text, shouldbeindex);
+			ArrayList<WordpoolWord> matchlist = new ArrayList<WordpoolWord>();
+			matchlist.add(match);
+			WordpoolDisplay.getInstance().addWordpoolWords(matchlist);
+			WriteToWpFileLine(wordpoolFilename, text, (shouldbeindex - 1));
 		}
 
 
@@ -170,7 +197,38 @@ public class AnnotateAction extends IdentifiedMultiAction {
 				
 				//add a new annotation object, and clear the field
 				AnnotationFileParser.appendAnnotation(ann, oFile);
-				AnnotationDisplay.addAnnotation(ann);
+				if(shouldbeindex != -1){
+					AnnotationDisplay.getInstance().addNewWPAnn(ann, shouldbeindex);
+
+					//Write the newly updated annotation row numbers to the annotation file
+					
+					String annotatorName = MyMenu.getAnnotator();
+					String annotationFilename = OSPath.basename(CurAudio.getCurrentAudioFileAbsolutePath()) + "." + Constants.temporaryAnnotationFileExtension;
+					File annotationFile = new File(annotationFilename);
+					File tmpFile = new File(oFile.getAbsolutePath() + "." + Constants.deletionTempFileExtension);
+					BufferedWriter fw = new BufferedWriter(new FileWriter(tmpFile));
+					
+					Annotation [] annList = AnnotationDisplay.getInstance().getAnnotationsInOrder();
+					int annListSize = annList.length;
+					//System.out.println("Number of annotations: " + Integer.valueOf(annListSize).toString());
+					for(Annotation currentAnn : annList){
+						String currline = AnnotationFileParser.makeLine(currentAnn) + "\n";
+						fw.write(currline);
+					}
+					//br.close();
+		
+					fw.close();	
+					if(annotationFile.delete() == false) {
+						GiveMessage.errorMessage("could not delete old file");
+					}
+					if(tmpFile.renameTo(annotationFile) == false) {
+						GiveMessage.errorMessage("could not rename temp deletion file to normal temp file");
+					}
+					AnnotationFileParser.prependHeader(annotationFile, annotatorName);
+				}
+				else{
+					AnnotationDisplay.getInstance().addAnnotation(ann);
+				}
 				WordpoolDisplay.clearText();
 			} 
 			catch (IOException e1) {
@@ -182,6 +240,40 @@ public class AnnotateAction extends IdentifiedMultiAction {
 	    //return focus to the frame after annotation, for the sake of action key bindings
 	    MyFrame.getInstance().requestFocusInWindow();
 	    MyMenu.updateActions();
+	}
+
+	public static void AppendToWpFile(String wpFilename, String wpWord){
+		try {
+			System.out.println("Attempting to append " + wpWord + " to file " + wpFilename);
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(wpFilename, true)));
+			out.println("");
+			out.print(wpWord);
+			out.close();
+			System.out.println("Finished appending");
+		} 
+		catch (IOException e2) {
+			e2.printStackTrace();
+			GiveMessage.errorMessage("Error appending to wordpool file! Check files for damage.");
+		}
+	}
+
+	public static void WriteToWpFileLine(String wpFilename, String wpWord, int wpLine){
+		try {
+			Path path = Paths.get(wpFilename);
+			List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+			
+			if(wpLine < lines.size()){
+				lines.add(wpLine, wpWord);
+			}
+			else{
+				lines.add(wpWord);
+			}
+			Files.write(path, lines, StandardCharsets.UTF_8);
+		} 
+		catch (IOException e2) {
+			e2.printStackTrace();
+			GiveMessage.errorMessage("Error appending to wordpool file! Check files for damage.");
+		}
 	}
 	
 	public static void writeSpans() {

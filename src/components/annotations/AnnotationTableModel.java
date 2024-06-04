@@ -122,6 +122,22 @@ public class AnnotationTableModel implements TableModel {
 	}
 	
 	
+	protected void addNewWPAnn(Annotation ann, int wpLine){
+		sortedAnns.add(ann);
+		Collections.sort(sortedAnns);
+		String annText = ann.getText();
+		for(Annotation otherAnn : sortedAnns){
+			String otherAnnText = otherAnn.getText();
+			if(otherAnnText.compareTo(annText) > 0){
+				otherAnn.setWordNum((otherAnn.getWordNum() + 1));
+			}
+		}
+
+		for(TableModelListener tml: listeners) {
+			tml.tableChanged(new TableModelEvent(this));
+		}
+	}
+
 	//adding duplicates is prevented by annotation-over deleting first annotation, performed in annotateaction
 	protected void addElement(Annotation ann) {
 		sortedAnns.add(ann);
