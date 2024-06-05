@@ -183,10 +183,12 @@ public class ConvertSuggestionAction extends IdentifiedSingleAction {
 
 				Annotation ann = new Annotation(time, match.getNum(), match.getText());
 
-				//check if we are annotating the same position as an existing annotation, if so delete
-				new DeleteSelectedAnnotationAction().actionPerformed(
-						new ActionEvent(WordpoolDisplay.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
-				WaveformDisplay.getInstance().repaint();
+				if (System.currentTimeMillis() == time){
+					//check if we are annotating the same position as an existing annotation, if so delete
+					new DeleteSelectedAnnotationAction().actionPerformed(
+							new ActionEvent(WordpoolDisplay.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
+					WaveformDisplay.getInstance().repaint();
+				}
 				
 				//file may no longer exist after deletion
 				if(oFile.exists() == false) {
