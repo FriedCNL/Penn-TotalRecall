@@ -56,11 +56,11 @@ public class SuggestionFileParser {
 		Scanner sc = new Scanner(line).useDelimiter(delimiter);
 		if(sc.hasNextDouble()) {
 			double time = sc.nextDouble();
-			if(sc.hasNextInt()) {
-				int wordNum = sc.nextInt();
+			if(sc.hasNextDouble()) {
+				double wordScore = sc.nextDouble();
 				if(sc.hasNext()) {
 					String text = sc.next().toUpperCase();
-					return new Suggestion(time, wordNum, text);
+					return new Suggestion(time, wordScore, text);
 				}
 			}
 		}
@@ -71,7 +71,7 @@ public class SuggestionFileParser {
 
 
 	private static String makeLine(Suggestion ann) {
-		return ann.getTime() + delimiter.toString() + ann.getWordNum() + delimiter.toString() + ann.getText();
+		return ann.getTime() + delimiter.toString() + ann.getWordScore() + delimiter.toString() + ann.getText();
 	}
 
 

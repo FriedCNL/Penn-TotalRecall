@@ -22,31 +22,31 @@ package components.suggestions;
  */
 public class Suggestion implements Comparable<Suggestion>{
 
-	private int wordNum;
+	private double wordScore;
 	private double time;
 	private String text;
 	
-	public Suggestion(double time, int wordNum, String text) {
+	public Suggestion(double time, double wordScore, String text) {
 		this.time = time;
-		this.wordNum = wordNum;
+		this.wordScore = wordScore;
 		this.text = text;
 	}
 
-	public Suggestion(int wordNum, String text) {
+	public Suggestion(String text, double wordScore) {
 		this.time = -1.0;
-		this.wordNum = wordNum;
+		this.wordScore = wordScore;
 		this.text = text;
 	}
 
 	public Suggestion(double time, String text) {
 		this.time = time;
-		this.wordNum = -1;
+		this.wordScore = -1.0;
 		this.text = text;
 	}
 
-	public Suggestion(double time, int wordNum) {
+	public Suggestion(double time, double wordScore) {
 		this.time = time;
-		this.wordNum = wordNum;
+		this.wordScore = wordScore;
 		this.text = "**WORD_EXPECTED**";
 	}
 
@@ -55,8 +55,8 @@ public class Suggestion implements Comparable<Suggestion>{
 		return time;
 	}
 	
-	public int getWordNum() {
-		return wordNum;		
+	public double getWordScore() {
+		return wordScore;		
 	}
 	
 	public String getText() {
@@ -65,7 +65,7 @@ public class Suggestion implements Comparable<Suggestion>{
 	
 	@Override
 	public int hashCode() {
-		return (text + time + wordNum).hashCode();
+		return (text + time + wordScore).hashCode();
 	}
 	
 	@Override
@@ -74,8 +74,8 @@ public class Suggestion implements Comparable<Suggestion>{
 			Suggestion a = (Suggestion)o;
 			if(getText().equals(a.getText())) {
 				if(getTime() == a.getTime()) {
-					if(getWordNum() == a.getWordNum()) {
-						if(getWordNum() == a.getWordNum()) {
+					if(getWordScore() == a.getWordScore()) {
+						if(getWordScore() == a.getWordScore()) {
 							return true;
 						}
 					}
@@ -87,7 +87,7 @@ public class Suggestion implements Comparable<Suggestion>{
 	
 	@Override
 	public String toString() {
-		return "Suggestion: " + text + " " + time + " ms " + " #" + wordNum;
+		return "Suggestion: " + text + " " + time + " ms " + " conf: " + wordScore;
 	}
 
 	public int compareTo(Suggestion o) {

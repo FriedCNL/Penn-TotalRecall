@@ -37,8 +37,8 @@ public class SuggestionTableModel implements TableModel {
 	//some of the methods below make assumptions about the number of columns and the Suggestion methods they hook up to
 	//doing this in a perfectly programmed worled would involve storing an array of Method objects
 	private static final int columnCount = 3;
-	private static final Class<?>[] columnClasses = new Class<?>[] {Double.class, String.class, Integer.class};
-	private static final String[] columnNames = new String[] {"Time (ms)", "Word", "Word #"};
+	private static final Class<?>[] columnClasses = new Class<?>[] {Double.class, String.class, Double.class};
+	private static final String[] columnNames = new String[] {"Time (ms)", "Word", "Model Conf"};
 	
 	private static final String colErr = "column index out of range";
 	private static final String rowErr = "row index out of range";
@@ -101,7 +101,7 @@ public class SuggestionTableModel implements TableModel {
 			return sugg.getText();
 		}
 		if(columnIndex == 2) {
-			return sugg.getWordNum();
+			return sugg.getWordScore();
 		}
 		throw new IllegalStateException(stateErr);
 	}

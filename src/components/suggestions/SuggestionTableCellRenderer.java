@@ -46,7 +46,13 @@ public class SuggestionTableCellRenderer extends DefaultTableCellRenderer {
 	@Override
 	protected void setValue(Object value) {
 		if(value != null) {
-			setText((value instanceof Double) ? noDecimalsFormat.format(value) : value.toString());
+			if( (value instanceof Double) && ((double)value > 1.0)){
+				setText(noDecimalsFormat.format(value));
+			}
+			else{
+				setText(value.toString());
+			}
+			//setText((value instanceof Double) ? noDecimalsFormat.format(value) : value.toString());
 		}
 		else {
 			setText("");
