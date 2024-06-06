@@ -182,8 +182,10 @@ public class ConvertSuggestionAction extends IdentifiedSingleAction {
 				}
 
 				Annotation ann = new Annotation(time, match.getNum(), match.getText());
-
-				if (System.currentTimeMillis() == time){
+				
+				double epsilon = 0.1;
+				double display_time = CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress());
+				if (Math.abs(display_time - time) <= epsilon){
 					//check if we are annotating the same position as an existing annotation, if so delete
 					new DeleteSelectedAnnotationAction().actionPerformed(
 							new ActionEvent(WordpoolDisplay.getInstance(), ActionEvent.ACTION_PERFORMED, null, System.currentTimeMillis(), 0));
